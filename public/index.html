@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniChat</title>
+    <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body class="container" >
+    
+    <h1>Mi Chat :)</h1>
+    <hr>
+
+    <form id="miFormulario">
+        <div class="row">
+            <div class="col-8">
+                <input 
+                    type="text" 
+                    name="txtMensaje" 
+                    id="txtMensaje" 
+                    placeholder="Mensaje"
+                    class="form-control"/>
+            </div>
+            <div class="col-4">
+                <button  type="submit" class="btn btn-primary" >
+                    Enviar
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col">
+            <ul id="misMensajes" class="mt-2" >
+              
+            </ul>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js" integrity="sha512-PU5S6BA03fRv1Q5fpwXjg5nlRrgdoguZ74urFInkbABMCENyx5oP3hrDzYMMPh3qdLdknIvrGj3yqZ4JuU7Nag==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        const socket = io('https://socket-react-server-basico.herokuapp.com/');
+        // const socket = io('https://localhost:4000');
+
+        // REFERENCIAS A LOS ELEMENTOS DEL DOM ( HTML)
+        const formulario = document.querySelector('#miFormulario');
+        const mensajes = document.querySelector('#misMensajes');
+        const txtMensaje = document.querySelector('#txtMensaje');
+
+        formulario.addEventListener( 'submit', (e)=>{
+            e.preventDefault();
+
+            const nuevoMensaje = txtMensaje.value;
+
+            socket.emit( 'mensaje-to-server',{
+                texto: nuevoMensaje
+            });
+
+        } );
+
+        socket.on( 'mensaje-from-server', ( data )=>{
+            mensajes.innerHTML +=`<li>${data.texto}</li>`;
+        });
+
+
+// COMO MANDAR MENSAJE CON SOCKET.IO
+        // socket.on( 'mensaje-bienvenida',( data )=>{
+        //     console.log("El servidor emitio algo:", data)
+        // });
+
+        // Emitir un evento 
+        // setTimeout(() => {
+        //     console.log("DESPUES DE 2 SEGUNDOS");
+        //     socket.emit( 'mensaje-cliente',{
+        //         msg:"Cliente- manda mensaje al servidor",
+        //         nombre: "Cristian"
+        //     });
+        // }, 2000);
+
+    </script>
+
+</body>
+</html>
